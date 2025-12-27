@@ -1,0 +1,16 @@
+@import "tailwindcss";
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(to right, #f8fafc, #eef2ff);
+}
+/* Add in index.css */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+/* Hide scrollbar - Keep scrolling functionality */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
