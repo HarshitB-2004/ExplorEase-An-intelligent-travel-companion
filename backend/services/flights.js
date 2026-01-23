@@ -1,27 +1,43 @@
-// backend/services/flights.js
-
 import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
 /**
- * Service function to search flights using Amadeus API
+ * Search flights using Amadeus API
  */
-export const searchFlights = async (params) => {
+export const searchFlights = async ({
+  originLocationCode,
+  destinationLocationCode,
+  departureDate,
+  adults = 1,
+  currencyCode = "INR",
+  nonStop = false,
+  travelClass = "ECONOMY"
+}) => {
+
   try {
-    const {
+
+    // ---------------- VALIDATION ----------------
+
+    if (!originLocationCode || !destinationLocationCode || !departureDate) {
+      console.error("❌ Flight search missing params:", {
+        originLocationCode,
+        destinationLocationCode,
+        departureDate
+      });
+
+      return { data: [] }; // prevent crash
+    }
+
+    console.log("✈ Searching Flights:", {
       originLocationCode,
       destinationLocationCode,
       departureDate,
-      returnDate,
-      adults,
-      children,
-      currencyCode,
-      nonStop,
-      travelClass,
-    } = params;
+      adults
+    });
 
-    // 1. GET ACCESS TOKEN
+    // ---------------- TOKEN ----------------
+
     const tokenRes = await axios.post(
       "https://test.api.amadeus.com/v1/security/oauth2/token",
       new URLSearchParams({
@@ -36,29 +52,42 @@ export const searchFlights = async (params) => {
 
     const token = tokenRes.data.access_token;
 
-    // 2. SEARCH FLIGHTS
+    // ---------------- FLIGHT SEARCH ----------------
+
     const response = await axios.get(
       "https://test.api.amadeus.com/v2/shopping/flight-offers",
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: {
           originLocationCode,
           destinationLocationCode,
           departureDate,
-          returnDate: returnDate || undefined,
           adults,
-          children: children || undefined,
           currencyCode,
           nonStop,
           travelClass,
-          max: 20,
+          max: 20
         },
       }
     );
 
-    return response.data;
+    console.log("✅ Flights Found:", response.data?.data?.length || 0);
+
+    // IMPORTANT: Return only the useful part
+    return {
+      data: response.data?.data || []
+    };
+
   } catch (error) {
-    console.error("❌ Flight API Error:", error.response?.data || error.message);
-    throw new Error("Flight search failed");
+
+    console.error(
+      "❌ Flight API Error:",
+      error.response?.data || error.message
+    );
+
+    // Return empty array instead of crashing
+    return { data: [] };
   }
 };

@@ -13,9 +13,14 @@ import Signup from './pages/Signup';
 import Deals from './pages/TravelDeals';
 import ComparePage from './pages/ComparePage';
 import './App.css';
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+import Dashboard from "./pages/Dashboard.jsx";
+
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <div className="App">
         <Navbar />
@@ -28,10 +33,19 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/deals" element={<Deals />} />
           <Route path="/compare" element={<ComparePage />} />
+          <Route
+  path="/dashboard"
+  element={
+    <PrivateRoute>
+      <Dashboard />
+    </PrivateRoute>
+  }
+/>
         </Routes>
         <Footer />
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 

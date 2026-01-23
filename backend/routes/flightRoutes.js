@@ -9,14 +9,24 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const {
-      originLocationCode,
-      destinationLocationCode,
-      departureDate,
-      adults,
-      currencyCode,
-    } = req.query;
+  originLocationCode,
+  destinationLocationCode,
+  departureDate,
+  adults,
+  currencyCode,
+  nonStop,
+  travelClass,
+} = req.query;
 
-    // 🪙 Get access token
+const adultCount = Number(adults);
+
+
+    if (!originLocationCode || !destinationLocationCode || !departureDate || !adults) {
+      return res.status(400).json({
+        message: "Missing required flight params",
+      });
+    }
+
     const tokenResponse = await axios.post(
       "https://test.api.amadeus.com/v1/security/oauth2/token",
       new URLSearchParams({
@@ -29,28 +39,32 @@ router.get("/", async (req, res) => {
 
     const token = tokenResponse.data.access_token;
 
-    // ✈️ Get flight offers
     const flightResponse = await axios.get(
       "https://test.api.amadeus.com/v2/shopping/flight-offers",
       {
         headers: { Authorization: `Bearer ${token}` },
         params: {
-          originLocationCode,
-          destinationLocationCode,
-          departureDate,
-          adults,
-          currencyCode,
-          max: 20,
-        },
+  originLocationCode,
+  destinationLocationCode,
+  departureDate,
+  adults: adultCount,
+  currencyCode,
+  nonStop,
+  travelClass,
+  max: 20,
+},
+
       }
     );
 
-    res.json(flightResponse.data);
+    res.json(flightResponse.data.data || []);
+
   } catch (error) {
     console.error("Flight search error:", error.response?.data || error.message);
     res.status(500).json({ message: "Error fetching flight data" });
   }
 });
+
 
 /* ===================== 🌆 2. CITY AUTOCOMPLETE ===================== */
 router.get("/locations", async (req, res) => {

@@ -44,52 +44,83 @@
 
 
 // server/src/services/itineraryAI.js
+
+// server/src/services/itineraryAI.js
+
+// server/services/itineraryAI.js
+
+// server/services/itineraryAI.js
+
+// server/services/itineraryAI.js
+
 import axios from "axios";
 
-export async function buildItineraryWithGemini({ prefs, flights, hotels, hotelImages, destImages, weather }) {
-  // 🔹 LIMIT SAMPLES (to reduce request size)
-  const limitedFlights = flights?.slice(0, 2) ?? [];
-  const limitedHotels = hotels?.slice(0, 3) ?? [];
-  const limitedImages = hotelImages?.slice(0, 3) ?? [];
-  const limitedWeather = weather?.slice(0, 3) ?? [];
+export async function buildItineraryWithGemini({ prefs, weather }) {
 
   const prompt = `
-You are an itinerary planner. Return STRICT JSON only (no markdown). Follow this schema:
+Generate a professional multi-day travel itinerary.
+
+RULES:
+- Return ONLY valid JSON
+- No markdown
+- No comments
+- No trailing commas
+- Use detailed descriptions
+- Hour based format
+
+FORMAT:
+
 {
-  "summary": string,
-  "days": [
-    {
-      "date": "YYYY-MM-DD",
-      "weather": {"conditions": string, "tempmax": number, "tempmin": number, "precipprob": number},
-      "items": [{"time":"HH:mm", "title": string, "notes": string, "image": string}]
-    }
-  ],
-  "recommendedHotels": [{"name": string, "notes": string, "image": string}],
-  "estimatedBudgetINR": number
+ "destinationDescription": "3-4 line city description",
+ "days":[
+   {
+     "date":"YYYY-MM-DD",
+     "weather":"short weather text",
+     "plan":[
+        {
+         "time":"09:00",
+         "title":"Place or Activity Name",
+         "description":"2-3 sentence professional description"
+        }
+     ]
+   }
+ ]
 }
 
-UserPreferences: ${JSON.stringify(prefs)}
-Weather: ${JSON.stringify(limitedWeather)}
-FlightsSample: ${JSON.stringify(limitedFlights)}
-HotelsSample: ${JSON.stringify(limitedHotels)}
-HotelImagesSample: ${JSON.stringify(limitedImages)}
-DestinationImages: ${JSON.stringify(destImages ?? [])}
+INPUT DATA:
+Destination: ${prefs.destinationName}
+Start Date: ${prefs.startDate}
+End Date: ${prefs.endDate}
+Travel Pace: ${prefs.travelPace}
+Trip Type: ${prefs.tripType}
+Weather: ${JSON.stringify(weather)}
+
+Generate FULL itinerary for ALL days between start and end date.
 `;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
-    const { data } = await axios.post(url, {
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      safetySettings: [
-        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-      ]
-    });
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        contents: [
+          { role: "user", parts: [{ text: prompt }] }
+        ]
+      }
+    );
 
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-    return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    const text =
+      response.data.candidates[0].content.parts[0].text;
+
+    const cleanJSON = text.substring(
+      text.indexOf("{"),
+      text.lastIndexOf("}") + 1
+    );
+
+    return JSON.parse(cleanJSON);
+
   } catch (err) {
-    console.error("Gemini API ERROR:", err.response?.data || err.message);
-    throw err; // Pass to controller
+    console.error("❌ Gemini Error:", err.message);
+    throw new Error("Gemini itinerary generation failed");
   }
 }

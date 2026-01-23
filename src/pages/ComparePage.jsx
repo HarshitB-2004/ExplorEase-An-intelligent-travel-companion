@@ -43,7 +43,7 @@ const [compareHotel, setCompareHotel] = useState(null);
     checkInDate: "",
     checkOutDate: "",
     adults: 1,
-    currency: "INR",
+    
   });
 
   const [hotelData, setHotelData] = useState([]);
@@ -269,7 +269,8 @@ const [compareHotel, setCompareHotel] = useState(null);
         },
       });
 
-      const data = response.data?.data ?? [];
+      const data = response.data || [];
+
       setFlightData(data);
 
       // destination image & weather (optional, from first segment)
@@ -308,7 +309,8 @@ const [compareHotel, setCompareHotel] = useState(null);
   };
 
   const fetchHotels = async (e) => {
-    if (e) e.preventDefault();
+   e?.preventDefault();
+
     setLoading(true);
 
     try {
@@ -320,7 +322,7 @@ const [compareHotel, setCompareHotel] = useState(null);
             checkInDate: hotelForm.checkInDate,
             checkOutDate: hotelForm.checkOutDate,
             adults: hotelForm.adults,
-            currency: hotelForm.currency || "INR",
+           
           },
         }
       );
@@ -981,6 +983,7 @@ const [compareHotel, setCompareHotel] = useState(null);
                     <option value="2plus">2+ stops</option>
                   </select>
                 </div>
+              
                 <div>
                   <label className="text-sm font-semibold text-gray-700">
                     Time of day
@@ -1096,9 +1099,11 @@ const [compareHotel, setCompareHotel] = useState(null);
 
       {/* ==================== HOTELS TAB ==================== */}
       {tab === "hotels" && (
-        <div className="flex flex-col lg:flex-row gap-6 p-6 bg-gradient-to-br from-indigo-50 via-white to-blue-50 min-h-[80vh] rounded-2xl shadow-inner">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 bg-gradient-to-br from-indigo-50 via-white to-blue-50 min-h-[80vh] rounded-2xl shadow-inner">
+
           {/* LEFT – sticky search + filters */}
-          <aside className="lg:w-1/3 w-full bg-white rounded-2xl shadow-lg p-6 space-y-6 lg:sticky lg:top-4 lg:self-start">
+          <aside className="lg:col-span-3 col-span-12 bg-white rounded-2xl shadow-lg p-6 space-y-6 sticky top-4 self-start">
+
             <form onSubmit={fetchHotels} className="space-y-4">
               <h3 className="text-lg font-semibold text-gray-800">
                 Find the perfect stay
@@ -1168,24 +1173,8 @@ const [compareHotel, setCompareHotel] = useState(null);
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    Currency
-                  </label>
-                  <select
-                    name="currency"
-                    value={hotelForm.currency}
-                    onChange={handleHotelChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                  >
-                    <option value="INR">INR (₹)</option>
-                    <option value="USD">USD ($)</option>
-                    <option value="EUR">EUR (€)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="AED">AED (د.إ)</option>
-                  </select>
                 </div>
-              </div>
+                
 
               <button
                 type="submit"
@@ -1194,6 +1183,7 @@ const [compareHotel, setCompareHotel] = useState(null);
               >
                 {loading ? "Searching…" : "Search Hotels"}
               </button>
+              
             </form>
 
             {/* Filters */}
@@ -1218,7 +1208,8 @@ const [compareHotel, setCompareHotel] = useState(null);
 
               <div>
                 <label className="text-sm font-semibold text-gray-700">
-                  Max price ({hotelForm.currency})
+                  Max price (INR)
+
                 </label>
                 <div className="flex justify-between text-[11px] text-gray-500 mb-1">
                   <span>
@@ -1302,8 +1293,11 @@ const [compareHotel, setCompareHotel] = useState(null);
           </aside>
 
           {/* RIGHT – map, weather, hotel list */}
-          <main className="lg:w-2/3 w-full space-y-4">
+          <main className="lg:col-span-6 col-span-12 space-y-4">
+
             {/* Map & weather */}
+            <div className="lg:col-span-3 col-span-12 space-y-4 sticky top-4">
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div
   className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 h-72 sticky top-4"
@@ -1346,10 +1340,13 @@ const [compareHotel, setCompareHotel] = useState(null);
           <p className="text-lg font-bold text-gray-800 mt-1">{day.tempmax}°</p>
           <p className="text-xs text-gray-500">{day.conditions}</p>
         </div>
+        
       ))}
+    
     </div>
   </div>
 )}
+</div>
             </div>
 
             {/* Hotels list */}
@@ -1363,7 +1360,8 @@ const [compareHotel, setCompareHotel] = useState(null);
                   const totalRatings = hotel.user_ratings_total;
                   const bookingSources = hotel.booking_sources || [];
                   const price = hotel.__priceNum;
-                  const currency = hotel.currency || hotelForm.currency;
+                  const currency = hotel.currency || "INR";
+
                   const referralLink =
                     hotel.url ||
                     `https://www.google.com/search?q=${encodeURIComponent(

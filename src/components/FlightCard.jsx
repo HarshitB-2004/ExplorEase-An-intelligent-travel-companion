@@ -1,196 +1,154 @@
 import React from "react";
 
+/* ================= AIRLINE MAP (UNCHANGED) ================= */
+
 const airlineNames = {
-  // (same map as before; left unchanged)
+  // 🇺🇸 United States
   AA: "American Airlines",
-  AC: "Air Canada",
-  AD: "Azul Brazilian Airlines",
-  AF: "Air France",
-  AI: "Air India",
-  AM: "Aeroméxico",
-  AR: "Aerolíneas Argentinas",
-  AS: "Alaska Airlines",
-  AT: "Royal Air Maroc",
-  AV: "Avianca",
-  AY: "Finnair",
-  AZ: "ITA Airways",
-  BA: "British Airways",
-  BG: "Biman Bangladesh Airlines",
-  BI: "Royal Brunei Airlines",
-  BR: "EVA Air",
-  BT: "Air Baltic",
-  CA: "Air China",
-  CI: "China Airlines",
-  CM: "Copa Airlines",
-  CX: "Cathay Pacific",
-  CZ: "China Southern Airlines",
   DL: "Delta Air Lines",
-  DY: "Norwegian Air Shuttle",
-  EK: "Emirates",
-  EI: "Aer Lingus",
-  ET: "Ethiopian Airlines",
-  EY: "Etihad Airways",
-  FJ: "Fiji Airways",
-  FI: "Icelandair",
-  FZ: "flydubai",
-  GA: "Garuda Indonesia",
-  GF: "Gulf Air",
-  GQ: "Sky Express",
-  HA: "Hawaiian Airlines",
-  HG: "Niki Airlines",
-  HU: "Hainan Airlines",
-  IB: "Iberia",
-  IR: "Iran Air",
-  IT: "Tigerair Taiwan",
-  JL: "Japan Airlines",
-  JP: "Adria Airways",
-  JU: "Air Serbia",
-  KE: "Korean Air",
-  KL: "KLM Royal Dutch Airlines",
-  KM: "Air Malta",
-  KP: "ASKY Airlines",
-  KQ: "Kenya Airways",
-  KU: "Kuwait Airways",
-  LA: "LATAM Airlines",
-  LG: "Luxair",
-  LH: "Lufthansa",
-  LO: "LOT Polish Airlines",
-  LX: "SWISS International Air Lines",
-  LY: "EL AL Israel Airlines",
-  MH: "Malaysia Airlines",
-  MK: "Air Mauritius",
-  MS: "Egyptair",
-  MU: "China Eastern Airlines",
-  NH: "All Nippon Airways",
-  NZ: "Air New Zealand",
-  OA: "Olympic Air",
-  OD: "Malindo Air",
-  OK: "Czech Airlines",
-  OS: "Austrian Airlines",
-  OU: "Croatia Airlines",
-  OZ: "Asiana Airlines",
-  PC: "Pegasus Airlines",
-  PG: "Bangkok Airways",
-  PK: "Pakistan International Airlines",
-  PR: "Philippine Airlines",
-  QR: "Qatar Airways",
-  QV: "Lao Airlines",
-  QF: "Qantas",
-  RJ: "Royal Jordanian",
-  RO: "TAROM",
-  RS: "Air Seoul",
-  RV: "Air Canada Rouge",
-  S7: "S7 Airlines",
-  SA: "South African Airways",
-  SB: "Air Calin",
-  SK: "SAS Scandinavian Airlines",
-  SN: "Brussels Airlines",
-  SQ: "Singapore Airlines",
-  SU: "Aeroflot Russian Airlines",
-  SV: "Saudia",
-  SW: "Air Namibia",
-  TA: "TACA",
-  TB: "TUI Fly Belgium",
-  TG: "Thai Airways",
-  TK: "Turkish Airlines",
-  TL: "Airnorth",
-  TP: "TAP Air Portugal",
-  TU: "Tunisair",
-  TV: "Tibet Airlines",
   UA: "United Airlines",
-  UL: "SriLankan Airlines",
-  UN: "Transaero Airlines",
-  UO: "HK Express",
-  UX: "Air Europa",
-  VA: "Virgin Australia",
-  VB: "VivaAerobus",
-  VF: "Valuair",
-  VS: "Virgin Atlantic",
-  VY: "Vueling Airlines",
-  WE: "Thai Smile",
-  WF: "Widerøe",
-  WY: "Oman Air",
-  XL: "LATAM Ecuador",
-  XM: "J-Air",
-  XP: "Xtra Airways",
-  XY: "flynas",
-  ZB: "Monarch Airlines",
-  ZL: "Regional Express",
-  "9W": "Jet Airways",
-  "6E": "IndiGo",
-  SG: "SpiceJet",
-  G8: "Go First",
-  UK: "Vistara",
-  I5: "AirAsia India",
-  AK: "AirAsia Malaysia",
-  FD: "Thai AirAsia",
-  D7: "AirAsia X",
-  U2: "easyJet",
-  FR: "Ryanair",
-  W6: "Wizz Air",
-  VY2: "Vueling",
-  HV: "Transavia",
-  LXU: "Luxair Express",
-  LOF: "LOT Charters",
-  IBS: "Iberia Express",
-  EN: "Air Dolomiti",
-  EZY: "easyJet Europe",
-  EW: "Eurowings",
-  WS: "WestJet",
-  TS: "Air Transat",
-  PD: "Porter Airlines",
-  "9K": "Cape Air",
+  AS: "Alaska Airlines",
   B6: "JetBlue Airways",
   NK: "Spirit Airlines",
   F9: "Frontier Airlines",
-  WN: "Southwest Airlines",
-  VX: "Virgin America",
-  SY: "Sun Country Airlines",
-  G4: "Allegiant Air",
-  HM: "Air Seychelles",
-  DT: "TAAG Angola Airlines",
-  PZ: "LATAM Paraguay",
-  JJ: "LATAM Brasil",
-  LAE: "LATAM Chile",
-  LP: "LATAM Peru",
-  LR: "Avianca Costa Rica",
-  TAI: "Avianca El Salvador",
-  AVH: "Avianca Honduras",
-  CMI: "Copa Colombia",
-  AE: "Mandarin Airlines",
-  GE: "TransAsia Airways",
+  HA: "Hawaiian Airlines",
+
+  // 🇨🇦 Canada
+  AC: "Air Canada",
+  WS: "WestJet",
+
+  // 🇬🇧 United Kingdom
+  BA: "British Airways",
+  U2: "easyJet",
+  LS: "Jet2",
+  TOM: "TUI Airways",
+
+  // 🇫🇷 France
+  AF: "Air France",
+  TO: "Transavia France",
+
+  // 🇩🇪 Germany
+  LH: "Lufthansa",
+  EW: "Eurowings",
+  DE: "Condor",
+
+  // 🇳🇱 Netherlands
+  KL: "KLM Royal Dutch Airlines",
+
+  // 🇪🇸 Spain
+  IB: "Iberia",
+  VY: "Vueling",
+  UX: "Air Europa",
+
+  // 🇮🇹 Italy
+  AZ: "ITA Airways",
+
+  // 🇨🇭 Switzerland
+  LX: "SWISS International Air Lines",
+
+  // 🇹🇷 Turkey
+  TK: "Turkish Airlines",
+  PC: "Pegasus Airlines",
+
+  // 🇮🇪 Ireland
+  FR: "Ryanair",
+  EI: "Aer Lingus",
+
+  // 🇷🇺 Russia
+  SU: "Aeroflot",
+
+  // 🇮🇳 India
+  AI: "Air India",
+  "6E": "IndiGo",
+  UK: "Vistara",
+  SG: "SpiceJet",
+  G8: "Go First",
+  IX: "Air India Express",
+  AKASA: "Akasa Air", // non-IATA display key
+
+  // 🇦🇪 Middle East
+  EK: "Emirates",
+  EY: "Etihad Airways",
+  FZ: "Flydubai",
+  G9: "Air Arabia",
+
+  // 🇶🇦 Qatar
+  QR: "Qatar Airways",
+
+  // 🇸🇦 Saudi Arabia
+  SV: "Saudia",
+  XY: "flynas",
+
+  // 🇰🇼 Kuwait
+  KU: "Kuwait Airways",
+
+  // 🇯🇵 Japan
+  JL: "Japan Airlines",
+  NH: "All Nippon Airways (ANA)",
   MM: "Peach Aviation",
-  GK: "Jetstar Japan",
-  JC: "J-Air",
-  TW: "T'way Air",
-  ZE: "Eastar Jet",
-  LJ: "Jin Air",
-  "7C": "Jeju Air",
-  VJ: "VietJet Air",
-  VN: "Vietnam Airlines",
-  QH: "Bamboo Airways",
-  HX: "Hong Kong Airlines",
-  "5J": "Cebu Pacific",
-  DG: "Cebgo",
-  TZ: "Scoot",
+
+  // 🇨🇳 China
+  CA: "Air China",
+  MU: "China Eastern Airlines",
+  CZ: "China Southern Airlines",
+  HU: "Hainan Airlines",
+
+  // 🇭🇰 Hong Kong
+  CX: "Cathay Pacific",
+
+  // 🇸🇬 Singapore
+  SQ: "Singapore Airlines",
   TR: "Scoot",
-  "3K": "Jetstar Asia",
-  MI: "SilkAir",
-  QZ: "Indonesia AirAsia",
-  JT: "Lion Air",
-  ID: "Batik Air",
-  SJ: "Sriwijaya Air",
-  W5: "Mahan Air",
-  EP: "Iran Aseman Airlines",
-  MN: "Kulula",
+
+  // 🇰🇷 South Korea
+  KE: "Korean Air",
+  OZ: "Asiana Airlines",
+
+  // 🇹🇭 Thailand
+  TG: "Thai Airways",
+  FD: "Thai AirAsia",
+
+  // 🇲🇾 Malaysia
+  MH: "Malaysia Airlines",
+  AK: "AirAsia",
+
+  // 🇮🇩 Indonesia
+  GA: "Garuda Indonesia",
+
+  // 🇦🇺 Australia
+  QF: "Qantas",
+  VA: "Virgin Australia",
+  JQ: "Jetstar Airways",
+
+  // 🇳🇿 New Zealand
+  NZ: "Air New Zealand",
+
+  // 🇧🇷 Brazil
+  LA: "LATAM Airlines",
+  G3: "GOL Airlines",
+  AD: "Azul Brazilian Airlines",
+
+  // 🇲🇽 Mexico
+  AM: "Aeroméxico",
+  Y4: "Volaris",
+
+  // 🇿🇦 South Africa
+  SA: "South African Airways",
   FA: "FlySafair",
-  LS: "Jet2.com",
-  BY: "TUI Airways",
-  BE: "Flybe",
-  A3: "Aegean Airlines",
-  PS: "Ukraine International Airlines",
-  FB: "Bulgaria Air",
+
+  // 🇪🇬 Egypt
+  MS: "EgyptAir",
+
+  // 🇪🇹 Ethiopia
+  ET: "Ethiopian Airlines",
+
+  // 🇰🇪 Kenya
+  KQ: "Kenya Airways",
+
+  // 🇲🇦 Morocco
+  AT: "Royal Air Maroc",
 };
+
 
 const currencySymbols = {
   INR: "₹",
@@ -201,15 +159,27 @@ const currencySymbols = {
 };
 
 const FlightCard = ({ flight }) => {
+
   const itinerary = flight.itineraries?.[0];
   const segments = itinerary?.segments || [];
+
   const firstSegment = segments[0];
   const lastSegment = segments[segments.length - 1];
 
-  const airlineCode = firstSegment?.carrierCode;
-  const airlineName = airlineNames[airlineCode] || airlineCode || "Unknown Airline";
+  if (!firstSegment || !lastSegment) return null;
+
+  /* ================= BASIC DATA ================= */
+
+  const airlineCode = firstSegment.carrierCode;
+  const airlineName =
+    airlineNames[airlineCode] || airlineCode || "Unknown Airline";
+
   const stops = Math.max(segments.length - 1, 0);
-  const duration = itinerary?.duration?.replace("PT", "").toLowerCase();
+
+  const duration = itinerary?.duration
+    ?.replace("PT", "")
+    .replace("H", "h ")
+    .replace("M", "m");
 
   const price = flight.price?.total || "N/A";
   const currency = flight.price?.currency || "INR";
@@ -219,31 +189,41 @@ const FlightCard = ({ flight }) => {
     ? `https://content.airhex.com/content/logos/airlines_${airlineCode}_200_50_r.png?proportions=keep`
     : "";
 
-  // Layover airports (arrival airport of each segment except the last)
+  /* ================= LAYOVER DISPLAY ================= */
+
   const layoverAirports = segments
     .slice(0, -1)
     .map((seg) => seg.arrival?.iataCode)
     .filter(Boolean);
 
   let layoverText = "Non-stop flight";
-  if (stops === 1) {
-    layoverText = `1 stop via ${layoverAirports.join(", ")}`;
-  } else if (stops > 1) {
+
+  if (stops === 1) layoverText = `1 stop via ${layoverAirports.join(", ")}`;
+  if (stops > 1)
     layoverText = `${stops} stops via ${layoverAirports.join(", ")}`;
-  }
 
-  // Simple booking integration: open a Google search with all details
-  const origin = firstSegment?.departure?.iataCode;
-  const destination = lastSegment?.arrival?.iataCode;
-  const departureDate = firstSegment?.departure?.at?.slice(0, 10); // YYYY-MM-DD
-  const flightNumber = firstSegment?.number;
+  /* ================= BOOKING REDIRECT (REAL) ================= */
 
-  const bookingQuery = `${airlineName} ${airlineCode || ""}${flightNumber || ""} ${origin} to ${destination} ${departureDate} flight booking`;
-  const bookingUrl = `https://www.google.com/search?q=${encodeURIComponent(bookingQuery)}`;
+  const handleBooking = () => {
+
+    const from = firstSegment.departure.iataCode;
+    const to = lastSegment.arrival.iataCode;
+
+    // YYYY-MM-DD → YYMMDD
+    const dateRaw = firstSegment.departure.at.split("T")[0];
+    const date = dateRaw.replaceAll("-", "").slice(2);
+
+    const bookingURL = `https://www.skyscanner.co.in/transport/flights/${from}/${to}/${date}/`;
+
+    window.open(bookingURL, "_blank");
+  };
+
+  /* ================= UI ================= */
 
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-4 flex flex-col md:flex-row md:items-center justify-between border border-gray-100 hover:border-blue-300">
-      {/* Airline */}
+
+      {/* Airline Section */}
       <div className="flex items-center gap-4 md:w-1/3 mb-3 md:mb-0">
         {logo && (
           <img
@@ -252,28 +232,33 @@ const FlightCard = ({ flight }) => {
             className="w-10 h-10 object-contain drop-shadow-sm"
           />
         )}
+
         <div>
           <h3 className="font-semibold text-gray-800 text-sm md:text-base">
             {airlineName}
           </h3>
+
           <p className="text-xs text-gray-500">
-            {origin} → {destination}
+            {firstSegment.departure.iataCode} →{" "}
+            {lastSegment.arrival.iataCode}
           </p>
-          {flightNumber && (
+
+          {firstSegment.number && (
             <p className="text-[11px] text-gray-400 mt-0.5">
               Flight {airlineCode}
-              {flightNumber}
+              {firstSegment.number}
             </p>
           )}
         </div>
       </div>
 
-      {/* Time + Duration + Stops */}
+      {/* Time Section */}
       <div className="text-center md:w-1/3 md:px-4">
         <p className="text-gray-800 text-sm font-medium">
-          {firstSegment?.departure?.at?.slice(11, 16)} →{" "}
-          {lastSegment?.arrival?.at?.slice(11, 16)}
+          {firstSegment.departure.at.slice(11, 16)} →{" "}
+          {lastSegment.arrival.at.slice(11, 16)}
         </p>
+
         <p className="text-xs text-gray-500 mt-1">{duration}</p>
         <p className="text-xs text-gray-400 mt-1">{layoverText}</p>
 
@@ -299,16 +284,16 @@ const FlightCard = ({ flight }) => {
             ? Number(price).toLocaleString("en-IN")
             : "N/A"}
         </p>
-        <a
-          href={bookingUrl}
-          target="_blank"
-          rel="noreferrer"
+
+        <button
+          onClick={handleBooking}
           className="inline-block bg-blue-600 text-white px-4 py-2 mt-2 text-sm rounded-md hover:bg-blue-700 hover:shadow-md transition-all"
         >
-          Select &amp; Book
-        </a>
+          Select & Book
+        </button>
+
         <p className="text-[11px] text-gray-400 mt-1">
-          Opens booking options in a new tab
+          Redirects to Skyscanner for secure booking
         </p>
       </div>
     </div>

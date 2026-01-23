@@ -14,6 +14,12 @@ import itineraryRoutes from "./routes/itinerary.js";
 import googleRoutes from "./routes/googleRoutes.js";
 // import itinerarySaveRoutes from './routes/itinerarySaveRoutes.js';
 import tripRoutes from "./routes/tripRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+
+
+
+
+
 
 
 
@@ -30,6 +36,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use("/api/currency", currencyRouter);
+app.use("/api/user", userRoutes);
 
 app.use("/api/auth", authRoutes);
 

@@ -1,132 +1,174 @@
-// src/pages/Dashboard.jsx
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 
 const Dashboard = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
 
-  const [itineraries, setItineraries] = useState([]);
-  const [newItinerary, setNewItinerary] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [budget, setBudget] = useState({ transport: "", stay: "", food: "" });
-
-
-  // 🔹 Fetch itineraries
-  const fetchItineraries = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/trips/${user.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setItineraries(res.data);
-    } catch (error) {
-      console.error("Error loading itineraries:", error);
-    }
-  };
+  const { user, logout } = useContext(AuthContext);
+  const [trips, setTrips] = useState([]);
+  const [activeTab, setActiveTab] = useState("trips");
 
   useEffect(() => {
-    fetchItineraries();
+
+    const fetchTrips = async () => {
+      const res = await axios.get(
+        "http://localhost:5000/api/trips/my-trips",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setTrips(res.data);
+    };
+
+    fetchTrips();
+
   }, []);
 
-  // 🔹 Save itinerary
-  const saveItinerary = async () => {
-    if (!newItinerary.trim()) return alert("Write something first!");
-    setLoading(true);
-
-    try {
-      await axios.post(
-        "http://localhost:5000/api/trips",
-        { userId: user.id, itinerary: newItinerary },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("Itinerary Saved!");
-      setNewItinerary("");
-      fetchItineraries(); // refresh data
-    } catch (error) {
-      alert("Failed to save itinerary");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔹 Delete itinerary
-  const deleteItinerary = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this itinerary?")) return;
-    
-    try {
-      await axios.delete(`http://localhost:5000/api/trips/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchItineraries();
-    } catch (error) {
-      console.error("Delete failed:", error);
-      alert("Failed to delete itinerary");
-    }
-  };
-
   return (
-    <div className="p-6 md:p-10 min-h-screen bg-gray-100">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold">Welcome, {user.name} 👋</h1>
-        <p className="text-gray-600">{user.email}</p>
-      </div>
 
-      {/* ================= NEW ITINERARY ================= */}
-      <div className="bg-white p-6 shadow-lg rounded-lg max-w-2xl mx-auto">
-        <h2 className="text-xl font-semibold mb-3">Create New Itinerary ✈️</h2>
+    <div className="min-h-screen bg-gray-100 flex">
 
-        <textarea
-          rows="4"
-          className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-400 mb-4"
-          placeholder="Example: 3-day trip to Goa with beach activities and local food..."
-          value={newItinerary}
-          onChange={(e) => setNewItinerary(e.target.value)}
-        />
+      {/* SIDEBAR */}
 
-        <button
-          onClick={saveItinerary}
-          disabled={loading}
-          className={`w-full py-2 text-white font-semibold rounded-lg transition ${
-            loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {loading ? "Saving..." : "Save Itinerary"}
-        </button>
-      </div>
+      <div className="w-64 bg-white shadow-lg p-6">
 
-      {/* ================= SAVED ITINERARIES ================= */}
-      <div className="mt-10 max-w-4xl mx-auto">
-        <h2 className="text-xl font-bold mb-4">Your Saved Itineraries 📚</h2>
-
-        {itineraries.length === 0 ? (
-          <p className="text-gray-500 text-center">
-            No itineraries yet. Create one above! ✍️
-          </p>
-        ) : (
-          <div className="grid md:grid-cols-2 gap-4">
-            {itineraries.map((item) => (
-              <div
-                key={item._id}
-                className="bg-white p-4 shadow rounded-lg border-l-4 border-blue-600"
-              >
-                <p className="text-gray-700 whitespace-pre-line">{item.itinerary}</p>
-
-                <p className="text-sm text-gray-400 mt-2">
-                  📅 {new Date(item.createdAt).toLocaleDateString()}
-                </p>
-
-                <button
-                  className="mt-3 bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded"
-                  onClick={() => deleteItinerary(item._id)}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
+        <div className="mb-8">
+          <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+            {user.name.charAt(0)}
           </div>
-        )}
+
+          <h3 className="mt-3 font-semibold">{user.name}</h3>
+          <p className="text-sm text-gray-500">{user.email}</p>
+        </div>
+
+        <div className="space-y-3">
+
+          <button
+            onClick={() => setActiveTab("trips")}
+            className={`dashboard-btn ${activeTab === "trips" && "active"}`}
+          >
+            Saved Trips
+          </button>
+
+          <button
+            onClick={() => setActiveTab("profile")}
+            className={`dashboard-btn ${activeTab === "profile" && "active"}`}
+          >
+            Profile
+          </button>
+
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`dashboard-btn ${activeTab === "settings" && "active"}`}
+          >
+            Settings
+          </button>
+
+          <button
+            onClick={logout}
+            className="dashboard-btn text-red-500"
+          >
+            Logout
+          </button>
+
+        </div>
+
       </div>
+
+      {/* MAIN CONTENT */}
+
+      <div className="flex-1 p-10">
+
+        {/* Saved Trips */}
+
+        {activeTab === "trips" && (
+
+          <>
+            <h2 className="text-2xl font-semibold mb-6">
+              Your Itineraries
+            </h2>
+
+            {trips.length === 0 ? (
+              <p className="text-gray-500">
+                No saved trips yet.
+              </p>
+            ) : (
+
+              <div className="grid md:grid-cols-2 gap-6">
+
+                {trips.map((trip) => (
+
+                  <div
+                    key={trip._id}
+                    className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
+                  >
+
+                    <h3 className="font-semibold text-lg">
+                      {trip.tripName}
+                    </h3>
+
+                    <p className="text-gray-600">
+                      {trip.destination}
+                    </p>
+
+                    <p className="text-sm text-gray-500 mt-1">
+                      {trip.startDate} → {trip.endDate}
+                    </p>
+
+                    <p className="mt-2 font-medium">
+                      Budget: ₹{trip.budget}
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
+
+          </>
+        )}
+
+        {/* Profile Tab */}
+
+        {activeTab === "profile" && (
+
+          <div className="bg-white p-8 rounded-xl shadow max-w-xl">
+
+            <h2 className="text-xl font-semibold mb-4">
+              Profile Information
+            </h2>
+
+            <p><strong>Name:</strong> {user.name}</p>
+            <p className="mt-2"><strong>Email:</strong> {user.email}</p>
+
+          </div>
+
+        )}
+
+        {/* Settings Tab */}
+
+        {activeTab === "settings" && (
+
+          <div className="bg-white p-8 rounded-xl shadow max-w-xl">
+
+            <h2 className="text-xl font-semibold mb-4">
+              Account Settings
+            </h2>
+
+            <p className="text-gray-600">
+              More settings coming soon...
+            </p>
+
+          </div>
+
+        )}
+
+      </div>
+
     </div>
   );
 };
